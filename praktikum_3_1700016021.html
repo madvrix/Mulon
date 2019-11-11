@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		canvas{
+			background-color: #ccc;
+		}
+	</style>
+</head>
+<body>
+<canvas height="450" width="800" id="canvas"></canvas>
+<script type="text/javascript">
+	var c=document.getElementById('canvas');
+	var ctx=c.getContext('2d');
+
+	var lines=[];
+
+	document.body.addEventListener('mousedown',drawline);
+	function drawline(e)
+	{
+		var x=e.offsetX;
+		var y=e.offsetY;
+		if(lines.length==0)
+		{
+			ctx.moveTo(x,y);
+		}
+		ctx.lineTo(x,y);
+		ctx.lineWidth=10;
+		ctx.strokeStyle='black';
+		ctx.stroke();
+		lines.push([x,y]);
+		var cr={
+			x:lines[0][0],
+			y:lines[0][1]
+		};
+		var target={
+			x:lines[lines.length-1][0],
+			y:lines[lines.length-1][1]
+		};
+		isCloseTo(cr,target);
+	}
+
+	function isCloseTo(cr,target)
+	{
+		var dist=Math.sqrt(((cr.x-target.x)*(cr.x-target.x))+((cr.y-target.y)*(cr.y-target.y)));
+		console.log(dist);
+		if(lines.length>1 && dist<6)
+		{
+			console.log('make polygon');
+			ctx.lineTo(target.x,target.y);
+			ctx.fillStyle = 'red';
+      		ctx.fill();
+      		lines=[];
+		}
+	}
+
+</script>
+</body>
+</html>
